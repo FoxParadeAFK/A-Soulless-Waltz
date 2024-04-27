@@ -6,7 +6,7 @@ using UnityEngine;
 public class WeaponSelector : MonoBehaviour {
     private int counter;
     private PlayerMaster playerMaster;
-    private bool isActionActive;
+    public bool isActionActive;
 
     public Action EventBreakReload;
 
@@ -30,7 +30,6 @@ public class WeaponSelector : MonoBehaviour {
             isActionActive = false;
         }
     }
-
     private void HandleBreakReload() {
         isActionActive = true;
         EventBreakReload?.Invoke();

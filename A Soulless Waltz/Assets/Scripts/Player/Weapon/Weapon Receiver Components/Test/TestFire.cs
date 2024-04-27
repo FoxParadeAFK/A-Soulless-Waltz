@@ -6,7 +6,7 @@ using UnityEngine;
 public class TestFire : MonoBehaviour
 {
     [SerializeField] private float accuracy;
-    [SerializeField] private float reloadSpeed;
+    [SerializeField] public float reloadSpeed { get; private set;}
     [SerializeField] private int magazineSize;
     private int currentMagazineSize;
     private AimerMaster aimerMaster;
@@ -29,6 +29,10 @@ public class TestFire : MonoBehaviour
         aimerMaster = GameObject.Find("Aimer").GetComponent<AimerMaster>();
         weaponFiring = GetComponentInParent<WeaponFiring>();
         currentMagazineSize = magazineSize;
+    }
+
+    private void Start() {
+        reloadSpeed = 3;
     }
     private void Update() {
         Debug.Log(aimingIncrease);
@@ -62,19 +66,9 @@ public class TestFire : MonoBehaviour
     private void HandleAimingCancel() {
         aimingIncrease = 1;
     }
+
     private void HandleReloadInput() {
-        if (!isReloading) StartCoroutine(ReloadRoutine());
-    }
-    private IEnumerator ReloadRoutine() {
-        isReloading = true;
-        float counter = 0;
-        while (counter < 3) {
-            counter += Time.deltaTime;
-            yield return null;
-        }
         currentMagazineSize = magazineSize;
-        isReloading = false;
-        EventReloadFinished?.Invoke();
     }
 
     private void OnEnable() {
@@ -86,6 +80,7 @@ public class TestFire : MonoBehaviour
         weaponFiring.EventBreakReload += HandleReloadInput;
 
     }
+
     private void OnDisable() {
         if (selectFireAuto) weaponFiring.EventFireWeaponAuto -= HandleFireInput; else weaponFiring.EventFireWeaponSemi -= HandleFireInput;
         weaponFiring.EventAimWeaponActive -= HandleAimingActive;
